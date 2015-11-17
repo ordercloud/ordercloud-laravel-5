@@ -1,10 +1,17 @@
 <?php namespace Ordercloud\Laravel\Providers;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Ordercloud\Laravel\Auth\AccessTokenStorage;
 use Ordercloud\Laravel\Auth\SessionAccessTokenStorage;
 use Ordercloud\Laravel\Auth\TokenRefresher;
 use Ordercloud\Laravel\Auth\UserProvider;
+use Ordercloud\Monolog\Formatters\VerboseMultilineFormatter;
+use Ordercloud\Monolog\Processors\IlluminateSessionProcessor;
+use Ordercloud\Monolog\Processors\OrdercloudRequestExceptionProcessor;
+use Ordercloud\Monolog\Processors\ReflectionExceptionsProcessor;
 use Ordercloud\Support\OrdercloudBuilder;
 use Psr\Log\LoggerInterface;
 
@@ -24,16 +31,20 @@ class OrdercloudServiceProvider extends ServiceProvider
     {
         parent::boot();
 
+        // Laravel 4 does not have
+        if ($this->isVersion5()) {
+            $this->publishes([ __DIR__.'/../config/config.php' => config_path('ordercloud.php') ]);
+        }
+
         $app = $this->app;
-        $config = $app['config'];
 
         // Client logging
-        if ($config->get('ordercloud::logging', false)) {
+        if ($this->config('logging', false)) {
             $this->builder->registerClientLogger($app->make('ordercloud.logging.client'));
         }
 
         // Extended logging (exceptions 'n such)
-        $app['log']->getMonolog()->pushHandler($app['logging.file-handler']);
+        $app['log']->getMonolog()->pushHandler($app->make('ordercloud.logging.file-handler'));
 
         // Extend laravel's auth with OC user provider
         $app['auth']->extend('ordercloud', function () use ($app)
@@ -46,8 +57,8 @@ class OrdercloudServiceProvider extends ServiceProvider
             $this->builder->setAccessToken($accessToken);
 
             $refresher = new TokenRefresher(
-                $config->get('ordercloud::organisation_code'),
-                $config->get('ordercloud::client_secret'),
+                $this->config('organisation_code'),
+                $this->config('client_secret'),
                 $accessToken->getRefreshToken(),
                 $accessTokenStorage
             );
@@ -66,13 +77,11 @@ class OrdercloudServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $config = $this->app['config'];
-
         $this->builder = OrdercloudBuilder::create()
-            ->setBaseUrl($config->get('ordercloud::api_url'))
-            ->setUsername($config->get('ordercloud::username'))
-            ->setPassword($config->get('ordercloud::password'))
-            ->setOrganisationToken($config->get('ordercloud::organisation_token'));
+            ->setBaseUrl($this->config('api_url'))
+            ->setUsername($this->config('username'))
+            ->setPassword($this->config('password'))
+            ->setOrganisationToken($this->config('organisation_token'));
 
         // Use registered logger interface for client logging
         $this->app->alias(LoggerInterface::class, 'ordercloud.logging.client');
@@ -97,5 +106,22 @@ class OrdercloudServiceProvider extends ServiceProvider
 
             return $handler;
         });
+    }
+
+    public function config($key, $default = null)
+    {
+        if ($this->isVersion5()) {
+            return config("ordercloud.{$key}", $default);
+        }
+
+        return $this->app['config']->get("ordercloud::{$key}", $default);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function isVersion5()
+    {
+        return version_compare(str_replace(' (LTS)', '', Application::VERSION), '5.0.0', '>=');
     }
 }
