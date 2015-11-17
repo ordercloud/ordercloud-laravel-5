@@ -31,10 +31,7 @@ class OrdercloudServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        // Laravel 4 does not have
-        if ($this->isVersion5()) {
-            $this->publishes([ __DIR__.'/../config/config.php' => config_path('ordercloud.php') ]);
-        }
+        $this->publishes([ __DIR__.'/../config/config.php' => config_path('ordercloud.php') ]);
 
         $app = $this->app;
 
@@ -110,18 +107,6 @@ class OrdercloudServiceProvider extends ServiceProvider
 
     public function config($key, $default = null)
     {
-        if ($this->isVersion5()) {
-            return config("ordercloud.{$key}", $default);
-        }
-
-        return $this->app['config']->get("ordercloud::{$key}", $default);
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function isVersion5()
-    {
-        return version_compare(str_replace(' (LTS)', '', Application::VERSION), '5.0.0', '>=');
+        return config("ordercloud.{$key}", $default);
     }
 }

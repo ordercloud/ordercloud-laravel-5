@@ -1,4 +1,4 @@
-# ordercloud-laravel
+# Ordercloud Laravel 5 extensions
 Laravel extensions for ordercloud client
 
 ## Installation
@@ -12,7 +12,6 @@ Ordercloud\Laravel\Providers\OrdercloudServiceProvider::class
 ```
 
 Publish the config fie
-- Version 5: 
 ```
 php artisan vendor:publish --provider="Ordercloud\Laravel\Providers\OrdercloudServiceProvider"
 ```
