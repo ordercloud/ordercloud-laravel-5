@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ordercloud\\Laravel": "src/"
+      "Ordercloud\\Laravel\\": "src/"
     }
   },
   "minimum-stability": "dev"
