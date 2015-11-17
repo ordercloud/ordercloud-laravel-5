@@ -1,0 +1,27 @@
+{
+  "name": "ordercloud/laravel",
+  "description": "Ordercloud laravel helpers",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Michael Nel",
+      "email": "michael@ordercloud.co.za"
+    }
+  ],
+  "require": {
+    "ordercloud/ordercloud": "~0.3",
+    "ordercloud/extentions-monolog": "~0.1",
+    "illuminate/support": ">=4",
+    "illuminate/session": ">=4"
+  },
+  "require-dev": {
+    "phpspec/phpspec": "2.2.0",
+    "phpspec/nyan-formatters": "1.0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ordercloud\\Laravel": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
