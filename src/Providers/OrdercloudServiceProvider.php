@@ -34,7 +34,7 @@ class OrdercloudServiceProvider extends ServiceProvider
         $app = $this->app;
 
         $this->bootLogging($app);
-        $this->bootAuth($app);
+
         // Extend laravel's auth with OC user provider
         $app['auth']->extend('ordercloud', function () use ($app)
         {
