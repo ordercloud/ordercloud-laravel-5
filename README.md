@@ -3,7 +3,7 @@ Laravel 5 extensions for ordercloud client
 
 ## Installation
 Add the following to your require block in composer.json config
-``` "ordercloud/laravel": "1.0" ```
+``` "ordercloud/laravel-5": "1.0" ```
 
 ## Configuration
 To install into a Laravel project, first do the composer install then add the ServiceProvider to your config/app.php service providers list.
