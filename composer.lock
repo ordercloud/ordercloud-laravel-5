@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "564899cf75cd3595c696e95a0069961c",
-    "content-hash": "d9af48667fd707ec46a128fce1ec4aa3",
+    "hash": "f92793d32f5221a87daef6ea9d745020",
+    "content-hash": "2823b0beb88df0c77651d43adb6ff957",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -285,7 +285,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "dev-master",
+            "version": "5.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -328,7 +328,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "dev-master",
+            "version": "5.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -370,7 +370,7 @@
         },
         {
             "name": "illuminate/session",
-            "version": "dev-master",
+            "version": "5.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/session.git",
@@ -420,16 +420,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "dev-master",
+            "version": "5.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "d7516df2d136d8ff4ede1d6214e91c003b4267cf"
+                "reference": "9af92f790dd3aa3fdf4de3551ed8054f97076bbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/d7516df2d136d8ff4ede1d6214e91c003b4267cf",
-                "reference": "d7516df2d136d8ff4ede1d6214e91c003b4267cf",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/9af92f790dd3aa3fdf4de3551ed8054f97076bbe",
+                "reference": "9af92f790dd3aa3fdf4de3551ed8054f97076bbe",
                 "shasum": ""
             },
             "require": {
@@ -472,7 +472,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2015-11-14 10:24:31"
+            "time": "2015-11-16 16:01:27"
         },
         {
             "name": "league/url",
@@ -699,12 +699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ordercloud/ordercloud-php.git",
-                "reference": "ab5abc4a9041460db757227e1a18823c0f05a9a6"
+                "reference": "c8e9f4a3b70354695187a0060ec4b81b26dfae4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ordercloud/ordercloud-php/zipball/ab5abc4a9041460db757227e1a18823c0f05a9a6",
-                "reference": "ab5abc4a9041460db757227e1a18823c0f05a9a6",
+                "url": "https://api.github.com/repos/ordercloud/ordercloud-php/zipball/c8e9f4a3b70354695187a0060ec4b81b26dfae4b",
+                "reference": "c8e9f4a3b70354695187a0060ec4b81b26dfae4b",
                 "shasum": ""
             },
             "require": {
@@ -743,7 +743,7 @@
                 }
             ],
             "description": "Ordercloud php client",
-            "time": "2015-11-16 11:30:30"
+            "time": "2015-11-17 11:50:28"
         },
         {
             "name": "psr/log",
