@@ -1,6 +1,6 @@
 <?php namespace Ordercloud\Laravel\Providers;
 
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -29,39 +29,12 @@ class OrdercloudServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
-
         $this->publishes([ __DIR__.'/../../config/config.php' => config_path('ordercloud.php') ]);
 
         $app = $this->app;
 
-        // Client logging
-        if ($this->config('logging', false)) {
-            $this->builder->registerClientLogger($app->make('ordercloud.logging.client'));
-        }
-
-        // Extended logging (exceptions 'n such)
-        $app['log']->getMonolog()->pushHandler($app->make('ordercloud.logging.file-handler'));
-
-        // Extend laravel's auth with OC user provider
-        $app['auth']->extend('ordercloud', function () use ($app)
-        {
-            return $app->make(UserProvider::class);
-        });
-
-        $accessTokenStorage = $app->make(AccessTokenStorage::class);
-        if ($accessToken = $accessTokenStorage->get()) {
-            $this->builder->setAccessToken($accessToken);
-
-            $refresher = new TokenRefresher(
-                $this->config('organisation_code'),
-                $this->config('client_secret'),
-                $accessToken->getRefreshToken(),
-                $accessTokenStorage
-            );
-
-            $this->builder->setTokenRefresher($refresher);
-        }
+        $this->bootLogging($app);
+        $this->bootAuth($app);
 
         // Register all oc components in the app container
         $this->builder->registerComponents($app);
@@ -108,5 +81,45 @@ class OrdercloudServiceProvider extends ServiceProvider
     public function config($key, $default = null)
     {
         return config("ordercloud.{$key}", $default);
+    }
+
+    /**
+     * @param Container $app
+     */
+    protected function bootLogging($app)
+    {
+        // Client logging
+        if ($this->config('logging', false)) {
+            $this->builder->registerClientLogger($app->make('ordercloud.logging.client'));
+        }
+
+        // Extended logging (exceptions 'n such)
+        $app['log']->getMonolog()->pushHandler($app->make('ordercloud.logging.file-handler'));
+    }
+
+    /**
+     * @param Container $app
+     */
+    protected function bootAuth($app)
+    {
+        // Extend laravel's auth with OC user provider
+        $app['auth']->extend('ordercloud', function () use ($app)
+        {
+            return $app->make(UserProvider::class);
+        });
+
+        $accessTokenStorage = $app->make(AccessTokenStorage::class);
+        if ($accessToken = $accessTokenStorage->get()) {
+            $this->builder->setAccessToken($accessToken);
+
+            $refresher = new TokenRefresher(
+                $this->config('organisation_code'),
+                $this->config('client_secret'),
+                $accessToken->getRefreshToken(),
+                $accessTokenStorage
+            );
+
+            $this->builder->setTokenRefresher($refresher);
+        }
     }
 }
