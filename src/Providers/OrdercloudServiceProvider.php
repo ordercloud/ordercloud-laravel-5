@@ -31,7 +31,7 @@ class OrdercloudServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        $this->publishes([ __DIR__.'/../config/config.php' => config_path('ordercloud.php') ]);
+        $this->publishes([ __DIR__.'/../../config/config.php' => config_path('ordercloud.php') ]);
 
         $app = $this->app;
 
