@@ -11,6 +11,11 @@ To install into a Laravel project, first do the composer install then add the Se
 Ordercloud\Laravel\Providers\OrdercloudServiceProvider::class 
 ```
 
+And add the AccessToken middleware
+```php 
+Ordercloud\Laravel\Auth\AccessTokenMiddleware::class
+```
+
 Publish the config fie
 ```
 php artisan vendor:publish --provider="Ordercloud\Laravel\Providers\OrdercloudServiceProvider"

@@ -35,6 +35,11 @@ class OrdercloudServiceProvider extends ServiceProvider
 
         $this->bootLogging($app);
         $this->bootAuth($app);
+        // Extend laravel's auth with OC user provider
+        $app['auth']->extend('ordercloud', function () use ($app)
+        {
+            return $app->make(UserProvider::class);
+        });
 
         // Register all oc components in the app container
         $this->builder->registerComponents($app);
@@ -47,11 +52,16 @@ class OrdercloudServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->builder = OrdercloudBuilder::create()
+        $this->builder = $builder = OrdercloudBuilder::create()
             ->setBaseUrl($this->config('api_url'))
             ->setUsername($this->config('username'))
             ->setPassword($this->config('password'))
             ->setOrganisationToken($this->config('organisation_token'));
+
+        $this->app->singleton(OrdercloudBuilder::class, function () use ($builder)
+        {
+            return $builder;
+        });
 
         // Use registered logger interface for client logging
         $this->app->alias(LoggerInterface::class, 'ordercloud.logging.client');
@@ -95,31 +105,5 @@ class OrdercloudServiceProvider extends ServiceProvider
 
         // Extended logging (exceptions 'n such)
         $app['log']->getMonolog()->pushHandler($app->make('ordercloud.logging.file-handler'));
-    }
-
-    /**
-     * @param Container $app
-     */
-    protected function bootAuth($app)
-    {
-        // Extend laravel's auth with OC user provider
-        $app['auth']->extend('ordercloud', function () use ($app)
-        {
-            return $app->make(UserProvider::class);
-        });
-
-        $accessTokenStorage = $app->make(AccessTokenStorage::class);
-        if ($accessToken = $accessTokenStorage->get()) {
-            $this->builder->setAccessToken($accessToken);
-
-            $refresher = new TokenRefresher(
-                $this->config('organisation_code'),
-                $this->config('client_secret'),
-                $accessToken->getRefreshToken(),
-                $accessTokenStorage
-            );
-
-            $this->builder->setTokenRefresher($refresher);
-        }
     }
 }

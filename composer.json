@@ -11,8 +11,7 @@
   "require": {
     "ordercloud/ordercloud": "~0.3",
     "ordercloud/extentions-monolog": "~0.1",
-    "illuminate/support": "~5",
-    "illuminate/session": "~5"
+    "laravel/framework": "~5"
   },
   "require-dev": {
     "phpspec/phpspec": "2.2.0",
@@ -22,6 +21,5 @@
     "psr-4": {
       "Ordercloud\\Laravel\\": "src/"
     }
-  },
-  "minimum-stability": "dev"
+  }
 }
